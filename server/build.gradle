@@ -1,0 +1,44 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+
+plugins {
+  id 'com.github.johnrengelman.shadow' version '4.0.2'
+}
+
+archivesBaseName = "temp-server"
+
+dependencies {
+  implementation(
+    'org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE',
+    'org.influxdb:influxdb-java:2.20'
+  )
+
+  testImplementation(
+    'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE',
+    'org.mockito:mockito-core:3.3.3'
+  )
+}
+
+def mainClass = 'rm.tempserver.Main'
+
+shadowJar {
+  manifest {
+    attributes 'Main-Class': mainClass
+  }
+
+  mergeServiceFiles()
+  append 'META-INF/spring.handlers'
+  append 'META-INF/spring.schemas'
+  append 'META-INF/spring.tooling'
+  transform(PropertiesFileTransformer) {
+    paths = ['META-INF/spring.factories' ]
+    mergeStrategy = "append"
+  }
+}
+
+build.dependsOn shadowJar
+
+task run(type: JavaExec) {
+  main = mainClass
+  classpath = sourceSets.main.runtimeClasspath
+  systemProperties = System.properties
+}

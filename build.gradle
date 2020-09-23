@@ -1,0 +1,46 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'idea'
+
+  group = 'rm.tempserver'
+  version = '1.0'
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    compile 'org.slf4j:jcl-over-slf4j:1.7.30',
+            'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+  }
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+  }
+
+  tasks.withType(JavaExec) {
+    if (project.hasProperty("args")) {
+      args = project.getProperty("args").tokenize()
+    }
+  }
+
+  artifacts {
+    archives sourcesJar
+  }
+}

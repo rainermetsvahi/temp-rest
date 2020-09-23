@@ -1,0 +1,10 @@
+# server listening port
+server.port=5000
+
+# InfluxDb connection details
+data-source.url=http://localhost:8086
+data-source.database=ispindel
+data-source.username=user
+data-source.password=pass
+
+spring.main.banner-mode=off
