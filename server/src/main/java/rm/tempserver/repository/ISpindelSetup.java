@@ -12,12 +12,11 @@ import org.influxdb.annotation.TimeColumn;
 
 @Data
 @Accessors(chain = true)
-@Measurement(name = ISpindelReading.MEASUREMENT)
+@Measurement(name = ISpindelSetup.MEASUREMENT)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ISpindelReading {
-    static final String MEASUREMENT = "ispindel_reading";
-    static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
+public class ISpindelSetup {
+    static final String MEASUREMENT = "ispindel_config";
 
     @TimeColumn(timeUnit = TimeUnit.SECONDS)
     @Column(name = "time")
@@ -26,19 +25,6 @@ public class ISpindelReading {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "angle")
-    private Double angle;
-
-    @Column(name = "temperature")
-    private Double temperature;
-
-    @Column(name = "battery")
-    private Double battery;
-
-    @Column(name = "gravity")
-    private Double gravity;
-
-    // special gravity
-    @Column(name = "sg")
-    private Double sg;
+    @Column(name = "formula")
+    private String formula;
 }
