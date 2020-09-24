@@ -9,11 +9,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import rm.tempserver.json.ISpindelConfig;
 import rm.tempserver.json.Json;
+import rm.tempserver.repository.ISpindelSetupRepository;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,10 +26,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Slf4j
 public class ISpindelControllerTest {
-    private static final String CONFIG_URL = "/api/v1/ispindel/config";
+    private static final String CONFIG_PATH = "/api/v1/ispindel/config";
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @MockBean
+    private ISpindelSetupRepository setupRepository;
 
     @Test
     public void shouldReadSgFormula() throws Exception {
@@ -35,6 +42,11 @@ public class ISpindelControllerTest {
             "0.8569582340773092 + 0.008490982720547135 *tilt-0.00014777102241208132 *tilt*tilt " +
                 "+ 9.877083679884538e-7*tilt*tilt*tilt"
         );
+
+        // mock repo
+        doAnswer(inv -> {
+            return null;
+        }).when(this.setupRepository).add(any());
 
         for (String formula: formulas) {
             this.testConfigUpdate(
@@ -49,10 +61,9 @@ public class ISpindelControllerTest {
     private void testConfigUpdate(ISpindelConfig config) throws Exception {
         this.mockMvc
             .perform(
-                post(CONFIG_URL)
+                post(CONFIG_PATH)
                     .header("Content-Type", "application/json")
                     .content(Json.serialize(config))
-
             )
             .andExpect(status().isOk());
     }
