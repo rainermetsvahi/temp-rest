@@ -26,7 +26,7 @@ public class ISpindelSetupRepository {
     public Optional<ISpindelSetup> findByName(String name) {
         Query query = BoundParameterQuery.QueryBuilder.newQuery(
             "SELECT * FROM " + ISpindelSetup.MEASUREMENT
-            + " WHERE name = $name "
+            + " WHERE ispindel_name = $name"
             + " ORDER BY time desc"
         )
             .bind("name", name)
@@ -40,8 +40,8 @@ public class ISpindelSetupRepository {
 
     public void add(ISpindelConfig ispindel) {
         Point point = Point.measurement(ISpindelSetup.MEASUREMENT)
-            .time(System.currentTimeMillis(), TimeUnit.SECONDS)
-            .tag("name", ispindel.getName())
+            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .tag("ispindel_name", ispindel.getName())
             .addField("formula", ispindel.getFormula())
             .build();
         this.database.write(point);

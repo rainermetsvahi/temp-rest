@@ -1,5 +1,6 @@
 package rm.tempserver.repository;
 
+import java.util.concurrent.TimeUnit;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -16,7 +17,7 @@ public class ISpindelReadingRepository {
 
     public void add(ISpindelReading reading) {
         Point point = Point.measurement(ISpindelReading.MEASUREMENT)
-            .time(System.currentTimeMillis(), ISpindelReading.TIME_UNIT)
+            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .tag("name", reading.getName())
             .addField("angle", reading.getAngle())
             .addField("temperature", reading.getTemperature())

@@ -22,7 +22,7 @@ public class ISpindelSetup {
     @Column(name = "time")
     private Instant time;
 
-    @Column(name = "name")
+    @Column(name = "ispindel_name")
     private String name;
 
     @Column(name = "formula")

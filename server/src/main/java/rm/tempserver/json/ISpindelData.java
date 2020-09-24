@@ -17,7 +17,7 @@ public class ISpindelData {
     private Double temperature;
 
     @JsonProperty("temp_units")
-    private Double temperatureUnit;
+    private String temperatureUnit;
 
     private Double battery;
     private Double gravity;
