@@ -17,7 +17,7 @@ public class ISpindelService {
     private static final double TILT_VALUE = 25.0;
     // SG value range for validating the formula with the test tilt value above
     private static final double MIN_SG = 0.95;
-    private static final double MAX_SG = 1.05;
+    private static final double MAX_SG = 1.08;
 
     @Autowired
     private ISpindelSetupRepository setupRepository;
