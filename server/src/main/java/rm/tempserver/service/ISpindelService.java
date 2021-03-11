@@ -14,10 +14,11 @@ import rm.tempserver.repository.ISpindelSetupRepository;
 @Slf4j
 public class ISpindelService {
     private static final String TILT_VAR = "tilt";
-    private static final double TILT_VALUE = 25.0;
+    private static final double VALIDATION_TILT_VALUE = 25.0;
     // SG value range for validating the formula with the test tilt value above
-    private static final double MIN_SG = 0.95;
-    private static final double MAX_SG = 1.08;
+    // in reality, 25 degrees ISpindel tilt means SG = 1.000
+    private static final double VALIDATION_MIN_SG = 0.95;
+    private static final double VALIDATION_MAX_SG = 1.05;
 
     @Autowired
     private ISpindelSetupRepository setupRepository;
@@ -69,12 +70,14 @@ public class ISpindelService {
             throw new IllegalArgumentException("SG formula must include '" + TILT_VAR + "'");
         }
         // perform a calculation to test whether we got a valid formula
-        double sg = calculateSG(TILT_VALUE, config.getFormula());
-        if (sg < MIN_SG || sg > MAX_SG) {
+        double sg = calculateSG(VALIDATION_TILT_VALUE, config.getFormula());
+        if (sg < VALIDATION_MIN_SG || sg > VALIDATION_MAX_SG) {
             throw new IllegalArgumentException(
                 String.format(
                     "The formula returned: %s that is not in expected range (%s, %s)",
-                    sg, MIN_SG, MAX_SG
+                    sg,
+                    VALIDATION_MIN_SG,
+                    VALIDATION_MAX_SG
                 )
             );
         }
