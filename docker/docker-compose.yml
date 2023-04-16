@@ -1,0 +1,34 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:1.8.10
+    container_name: influxdb
+    ports:
+      - 8086:8086
+      - 8088:8088
+    volumes:
+      - /db_graf/influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=METRICS
+      - INFLUXDB_USERNAME=${INFLUXDB_USERNAME}
+      - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD}
+    networks:
+      - db_graf_network
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - /db_graf/grafana-storage:/var/lib/grafana
+      - /db_graf/grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    networks:
+      - db_graf_network
+networks:
+  db_graf_network:
+    external: true
