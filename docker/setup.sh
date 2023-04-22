@@ -1,7 +1,6 @@
 docker network create db_graf_network
-docker compose up -d
-docker compose stop
 
+sudo mkdir /db_graf
 sudo chmod 777 -R /db_graf
 
-sh create-db-table.sh
+./rebuild.sh

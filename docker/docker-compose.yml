@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
   influxdb:
     image: influxdb:1.8.10
@@ -8,10 +8,11 @@ services:
       - 8088:8088
     volumes:
       - /db_graf/influxdb:/var/lib/influxdb
+      - ./influxdb-scripts:/scripts
     environment:
-      - INFLUXDB_DB=METRICS
       - INFLUXDB_USERNAME=${INFLUXDB_USERNAME}
       - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD}
+    restart: always
     networks:
       - db_graf_network
   grafana:
@@ -23,10 +24,12 @@ services:
       - /db_graf/grafana-storage:/var/lib/grafana
       - /db_graf/grafana-provisioning/:/etc/grafana/provisioning
     depends_on:
-      - influxdb
+      influxdb:
+        condition: service_started
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    restart: always
     networks:
       - db_graf_network
 networks:
