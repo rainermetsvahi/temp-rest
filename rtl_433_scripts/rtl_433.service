@@ -1,0 +1,14 @@
+[Unit]
+Description=433MHz receiver on DVB stick
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/rtl_433 -R 03 -F "influx://localhost:8086/write?db=rtl_433"
+RestartSec=0
+Restart=always
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

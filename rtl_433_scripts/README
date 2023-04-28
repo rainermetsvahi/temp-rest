@@ -1,0 +1,6 @@
+# steps to run rtl_433 automatically on startup
+
+sudo cp rtl_433.service /etc/systemd/system/rtl_433.service
+sudo service rtl_433 start
+sudo systemctl enable rtl_433
+
